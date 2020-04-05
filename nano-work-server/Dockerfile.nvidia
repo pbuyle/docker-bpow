@@ -1,0 +1,20 @@
+FROM nvidia/opencl:devel AS builder
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential wget ca-certificates git && \
+    rm -rf /var/lib/apt/lists/ && \
+    git clone https://github.com/nanocurrency/nano-work-server.git && \
+    cd nano-work-server && \
+    wget https://sh.rustup.rs -O - | sh -s -- -y && \
+    export PATH=$HOME/.cargo/bin:$PATH && \
+    cargo build --release
+
+# FROM nvidia/opencl:runtime
+ 
+# COPY --from=builder /nano-work-server/target/release/nano-work-server /nano-work-server
+
+FROM nvidia/opencl:runtime
+
+COPY --from=builder /nano-work-server/target/release/nano-work-server /nano-work-server
+
+ENTRYPOINT ["/nano-work-server"]
