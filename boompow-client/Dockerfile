@@ -1,6 +1,6 @@
 FROM python:3.7-alpine AS builder
 ENV PYTHONUNBUFFERED 1
-ARG BPOW_VERSION=2.0.2
+ARG BPOW_VERSION=2.0.3
 
 RUN apk --update upgrade && \
     apk add --update build-base && \
