@@ -1,0 +1,16 @@
+FROM nvidia/opencl:devel AS builder
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y git ocl-icd-opencl-dev build-essential && \
+    rm -rf /var/lib/apt/lists/ && \
+    git clone https://github.com/BananoCoin/banano-vanity.git && \
+    cd banano-vanity && \
+    wget https://sh.rustup.rs -O - | sh -s -- -y && \
+    export PATH=$HOME/.cargo/bin:$PATH && \
+    cargo build --release --features gpu
+
+FROM nvidia/opencl:runtime
+
+COPY --from=builder /banano-vanity/target/release/banano-vanity /banano-vanity
+
+ENTRYPOINT ["/banano-vanity"]
