@@ -1,7 +1,7 @@
 FROM nvidia/opencl:devel AS builder
 # Install build dependencies
 RUN apt-get update && \
-    apt-get install -y git ocl-icd-opencl-dev build-essential && \
+    apt-get install -y --no-install-recommends build-essential wget ca-certificates git && \
     rm -rf /var/lib/apt/lists/ && \
     git clone https://github.com/BananoCoin/banano-vanity.git && \
     cd banano-vanity && \
