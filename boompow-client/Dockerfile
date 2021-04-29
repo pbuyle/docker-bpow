@@ -1,11 +1,13 @@
 FROM python:3.7-alpine AS builder
 ENV PYTHONUNBUFFERED 1
-ARG BPOW_VERSION=2.0.3
+ARG BPOW_VERSION=3.0.1
 
 RUN apk --update upgrade && \
     apk add --update build-base && \
-    rm -rf /var/cache/apk/* && \
-    wget https://github.com/BananoCoin/boompow/releases/download/v${BPOW_VERSION}/bpow-client-v${BPOW_VERSION//./}.zip -O - | unzip -d / - && \
+    rm -rf /var/cache/apk/*
+
+RUN mkdir /bpow-client && \
+    wget https://github.com/BananoCoin/boompow/releases/download/v${BPOW_VERSION}/bpow-client-v${BPOW_VERSION//./}.zip -O - | unzip -d /bpow-client - && \
     mkdir /wheels && \
     cd /wheels && \
     pip wheel --no-cache-dir -r /bpow-client/requirements.txt && \
