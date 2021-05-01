@@ -1,0 +1,49 @@
+# This file is a template, and might need editing before it works on your project.
+default:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+bpow-client:
+  variables:
+    PATH: boompow-client
+    IMAGE: bpow-client
+  script:
+    - docker build --pull -t "$IMAGE" $PATH
+    - docker push "$IMAGE"
+  only:
+    - main
+
+dpow-client:
+  variables:
+    PATH: dpow-client
+    IMAGE: dpow-client
+  script:
+    - docker build --pull -t "$IMAGE" $PATH
+    - docker push "$IMAGE"
+  only:
+    - main
+
+nano-work-server:
+  variables:
+    PATH: nano-work-server
+    IMAGE: nano-work-server
+  script:
+    - docker build --pull -t "$IMAGE" $PATH
+    - docker push "$IMAGE"
+  only:
+    - main
+
+banano-vanity:
+  variables:
+    PATH: banano-vanity
+    IMAGE: banano-vanity
+  script:
+    - docker build --pull -t "$IMAGE" $PATH
+    - docker push "$IMAGE"
+  only:
+    - main
